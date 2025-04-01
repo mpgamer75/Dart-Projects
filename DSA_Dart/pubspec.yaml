@@ -1,0 +1,8 @@
+name: dsa_dart
+description: Algorithmes de tri en Dart
+
+environment:
+  sdk: '^3.6.0'    # Ceci correspond à votre version de Dart
+
+dependencies:
+  http: ^1.1.0
