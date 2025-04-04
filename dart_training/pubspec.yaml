@@ -1,0 +1,9 @@
+name: dart_training
+description: Programme de génération de nombres aléatoires.
+version: 1.0.0
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+
+dependencies:
+  path: ^1.8.0

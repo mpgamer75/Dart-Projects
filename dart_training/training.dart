@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:io';
+import 'package:path/path.dart as path';
 
 void main() {
   formulaire();
@@ -15,7 +16,7 @@ int generateRandomNumber() {
 // et stockage de ce nombre dans une liste dynamic puis tri de la liste
 // avec fonction de tri (plus petit au plus grand) et affichage de la liste originale puis triée
 
-void formulaire() {
+void formulaire() async {
   List<int> list = [];
   int? nombre; // avec int? cela permet d'utiliser null ==> null safety
   String? choix = "";
@@ -67,6 +68,14 @@ void formulaire() {
       case "q":
         print("Programme terminé. Au revoir !");
         break;
+
+      case "f":
+        if (list.isNotEmpty) {
+          sauvegardeFichierTXT(list);
+        } else {
+          print("Erreur: la liste est vide, impossible de sauvegarder");
+        }
+        break;
       default:
         print("Veuillez entrer une valeur valide (g, s, a, t, x ou q)");
         break;
@@ -78,18 +87,56 @@ void afficherMenu() {
   print("\n============= Menu ==============");
   print("1. Appuyez sur la touche g pour générer un nombre aléatoire");
   print("2. Appuyez sur la touche s pour stocker le nombre dans une liste");
-  print("3. Appuyez sur a pour afficher la liste de nombres non triée");
+  print(
+    "3. Appuyez sur la touche a pour afficher la liste de nombres non triée",
+  );
   print("4. Appuyez sur la touche t pour trier la liste de nombres");
   print("5. Appuyez sur la touche x pour afficher la liste triée");
-  print("6. Appuyez sur la touche q pour quitter le programme");
+  print(
+    "6. Appuyer sur la touche f pour sauvegarder la liste dans un fichier .txt",
+  );
+  print("7. Appuyez sur la touche q pour quitter le programme");
   print("================================================");
 }
 
-// fonction qui stock la liste trié dans un fichier .txt == > à finir 
+// fonction qui stock la liste trié dans un fichier .txt == > à finir
 
-/*void StockageListe(List<int> list){
-  File file = File()
+Future<void> sauvegardeFichierTXT(List<int> donnees) async {
+  stdout.write("Entrez le nom du fichier ( ne pas inclure l'extension) : ");
+  String? nomFichier = stdin.readLineSync();
+
+  if (nomFichier == null || nomFichier.trim().isEmpty) {
+    print("Erreur : le nom du fichier ne peut pas être vide ou null");
+    return;
+  }
+
+  if (!nomFichier.endsWith('.txt')) {
+    nomFichier += '.txt'; // ajoute l'extension si ce n'est pas fait
+  }
+
+  final file = File(nomFichier);
+
+  try {
+    // Véerification si le fichier existe déjà
+    if (await file.exists()) {
+      print("Le fichier $nomFichier existe déjà. On l'écrase ? (o/n)");
+      String? reponse = stdin.readLineSync();
+
+      if (reponse == null || reponse.toLowerCase() != 'o') {
+        print("Sauvegarde annulée");
+        return;
+      }
+    }
+
+    String contenu = donnees.join(
+      '\n',
+    ); // ici on convertit les données donc les nombres en string
+    await file.writeAsString(contenu);
+    print("Donné sauvegardées dans le fichier $nomFichier avec succès");
+  } catch (e) {
+    print("Erreur lors de la sauvegarde des données dans le fichier : $e");
+  }
 }
-*/
-
-// Aussi à implémmenter ==> notre propore fonction de tri  en utilisant soit tri par insertion ou tri à bulles 
+// erreurs présntes au niveau de l'import ==> à corriger 
+// à finir ==> emplacement du fichier créer 
+// Aussi à implémmenter ==> notre propore fonction de tri  en utilisant soit tri par insertion ou tri à bulles
